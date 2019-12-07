@@ -2,6 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+def find_nearest(force_m, dx):
+    force_m[1] = np.asarray(force_m[1])
+    idx = (np.abs(force_m[1] - np.abs(dx))).argmin()
+    if dx<0:
+    	return -force_m[0][idx]
+    else:
+    	return force_m[0][idx]
 
 i=0
 f = 0
@@ -35,6 +42,15 @@ print(m)
 #x[0]=0.0
 x_m[0]=[x[0]]
 print(x)
+force_m=[[],[]]
+h=1
+accuracy=100*l+1
+while h<accuracy:
+	deltax=(l-h/accuracy)
+	force=q**2/deltax**2
+	force_m[0].append(force)
+	force_m[1].append(deltax)
+	h+=1
 #print(a_m)
 '''
 fig = plt.figure()
@@ -57,6 +73,8 @@ while steps <500:
 				k=2
 			else:
 				accel = (x[i]-x[f])/abs((x[i]-x[f])**3)*q**2/m[i]
+				#dx = (x[i]-x[f])
+				#accel = find_nearest(force_m,dx)/m[i]
 				a[i] = a[i] + accel
 			f +=1
 		i+=1
